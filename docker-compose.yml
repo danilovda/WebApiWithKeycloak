@@ -1,0 +1,21 @@
+services:
+  keycloak.auth.api:
+    image: ${DOCKER_REGISTRY-}webapi
+    container_name: Keycloak.Auth.Api
+    build:
+      context: .
+      dockerfile: WebApi/Dockerfile    
+  
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: Keycloak
+    command: start-dev
+    environment:
+      - KC_HEALTH_ENABLED=true
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+    ports:
+      - 18080:8080
+  
